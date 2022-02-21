@@ -1,33 +1,54 @@
-let input = document.body.querySelector('input') //입력값
-let resetBtn = document.body.querySelector(".reset");
-let result = document.body.querySelector(".result"); //결과도출
+let form = document.querySelector('form')
+let input = document.querySelector('input') //입력값
+let resetBtn = document.querySelector(".reset");
+let result = document.querySelector(".result"); //결과도출
 
-let ran = 345; //랜덤 선택으로 변경필요
 let strike = 0;
 let ball = 0;
-let answer= 346; //input으로 값 받을 예정
+let number = [];
 
-function game (){
-    ran = ran.toString().split('')
-    answer = answer.toString().split('');
+//숫자랜덤생성
+function newNumber () {
+    let numberArray = [1,2,3,4,5,6,7,8,9];
+    for(var i =0; i < 3; i++) {
+        let getNumber = numberArray.splice(Math.floor(Math.random() * (9 - i)), 1)[0];
+        let strNumber = getNumber.toString();
+        number.push(strNumber);
+    }
+}
+newNumber();
+console.log(number);
+
+form.addEventListener('submit', function(e){
+    e.preventDefault();
     
+    let answer = input.value.split('')
+    // console.log(answer);
+
+    if(number === answer) {
+        result.innerText = '정답입니다! 게임을 새로 시작하려면 1, 종료하려면 2를 입력해주세요.';
+        input.value = '';
+        input.focus();
+        newNumber();
+    }
+
     for(var i = 0; i < 3; i++){
-        if(ran[i] === answer[i])
+        if(number[i] === answer[i])
             strike ++;
-        else if(ran.indexOf(answer[i]) > -1 ){
+        else if(number.indexOf(answer[i]) > -1 ){
             ball ++;
         }
     }
     
     if(strike === 3){
-        result.innerText = '정답입니다! 게임을 새로 시작하려면 1, 종료하려면 2를 입력해주세요.';
+        // if(answer === 1) break;
+        if(answer === 2) reset();
     }
+
     else{
         result.innerText = '스트라이크' + strike + ', 볼' + ball;
         input.value = '';
         input.focus();
     }
-}
-game()
-
+});
 
